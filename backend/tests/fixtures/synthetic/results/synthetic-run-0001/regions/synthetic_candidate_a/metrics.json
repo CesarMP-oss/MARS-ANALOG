@@ -1,0 +1,90 @@
+{
+  "region_id": "synthetic_candidate_a",
+  "scale_m": 463.058,
+  "metrics": [
+    {
+      "region_id": "synthetic_candidate_a",
+      "metric": "slope",
+      "unit": "degree",
+      "method": "synthetic",
+      "scale_m": 463.058,
+      "status": "ok",
+      "n_valid": 100,
+      "valid_fraction": 0.95,
+      "source_quality": {
+        "earth_filled_fraction": 0.05,
+        "mars_interpolated_fraction": null
+      },
+      "summary": {
+        "p05": 1.0,
+        "p25": 2.0,
+        "median": 3.0,
+        "p75": 4.0,
+        "p95": 5.0,
+        "mean": 6.0,
+        "std": 7.0,
+        "iqr": 8.0
+      },
+      "histogram": {
+        "bin_edges": [
+          0.0,
+          1.0,
+          2.0
+        ],
+        "counts": [
+          60,
+          40
+        ]
+      },
+      "provenance_id": "prov_00000000000000aa"
+    },
+    {
+      "region_id": "synthetic_candidate_a",
+      "metric": "tri_riley",
+      "unit": "m",
+      "status": "insufficient_data",
+      "n_valid": 10,
+      "valid_fraction": 0.4,
+      "provenance_id": "prov_00000000000000aa"
+    },
+    {
+      "region_id": "synthetic_candidate_a",
+      "metric": "local_relief",
+      "unit": "m",
+      "status": "below_noise_floor",
+      "scale_m": 463.058,
+      "summary": {
+        "p05": 1.0,
+        "p25": 2.0,
+        "median": 3.0,
+        "p75": 4.0,
+        "p95": 5.0,
+        "mean": 6.0,
+        "std": 7.0,
+        "iqr": 8.0
+      },
+      "flags": [
+        "DEM_NOISE_FLAT_TERRAIN"
+      ],
+      "noise_floor": {
+        "value": 5.0,
+        "unit": "m",
+        "method": "synthetic",
+        "signal_above_noise": false
+      },
+      "provenance_id": "prov_00000000000000aa"
+    },
+    {
+      "region_id": "synthetic_candidate_a",
+      "metric": "profile_curvature",
+      "unit": "1/m",
+      "status": "not_computed"
+    },
+    {
+      "region_id": "synthetic_candidate_a",
+      "metric": "plan_curvature",
+      "unit": "1/m",
+      "status": "not_computed"
+    }
+  ]
+}

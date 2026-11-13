@@ -1,0 +1,16 @@
+# SYNTHETIC TEST MANIFEST - not a real dataset.
+manifest_version: "test"
+datasets:
+  - id: synthetic_dem
+    body: earth
+    name: "SYNTHETIC TEST DATASET (not real data)"
+    product_id: "SYNTHETIC"
+    source_url: "https://example.invalid/synthetic"
+    nominal_resolution_m: 100.0
+    horizontal_reference: "synthetic"
+    vertical_reference: "synthetic"
+    citation: "Synthetic test fixture"
+    known_limitations: [SRTM_VOID_FILL]
+    files:
+      - name: synthetic.tif
+        role: elevation

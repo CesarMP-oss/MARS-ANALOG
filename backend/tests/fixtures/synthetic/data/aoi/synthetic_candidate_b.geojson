@@ -1,0 +1,43 @@
+{
+  "type": "Feature",
+  "id": "synthetic_candidate_b",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -69,
+          -21
+        ],
+        [
+          -68,
+          -21
+        ],
+        [
+          -68,
+          -20
+        ],
+        [
+          -69,
+          -20
+        ],
+        [
+          -69,
+          -21
+        ]
+      ]
+    ]
+  },
+  "properties": {
+    "name": "SYNTHETIC synthetic_candidate_b",
+    "body": "earth",
+    "crs": "EPSG:4326",
+    "role": "candidate",
+    "dataset_id": "synthetic_dem",
+    "aoi_version": "0.0.0-test",
+    "boundary_source": "Synthetic test fixture",
+    "rationale": "Synthetic test fixture",
+    "area_km2": null,
+    "is_synthetic": true
+  }
+}
