@@ -58,6 +58,11 @@ npm run dev                  # http://localhost:5173 (proxy /api -> http://local
 
 Comprobaciones: `npm run lint`, `npm test`, `npm run build`.
 
+Secciones (rutas con hash): Dashboard `#/`, Regiones `#/regiones`, Mapas `#/mapas/tierra` y
+`#/mapas/marte`, Comparador `#/comparador`, Análisis `#/analisis` e Índice ACI `#/aci`. Los mapas
+necesitan Internet para las teselas de contexto (Esri World Imagery y NASA Mars Trek). Sin
+resultados calculados, métricas y ACI se muestran como pendientes; nunca con valores de ejemplo.
+
 ## Contribuir
 
 Ver [CONTRIBUTING.md](CONTRIBUTING.md).

@@ -1,40 +1,39 @@
-import { useEffect, useState } from 'react'
-import { getHealth, getLimitations } from './api/client.js'
-import LimitationsBanner from './components/LimitationsBanner.jsx'
-import StatusPanel from './components/StatusPanel.jsx'
+import Layout from './components/Layout.jsx'
+import AciPage from './pages/AciPage.jsx'
+import AnalysisPage from './pages/AnalysisPage.jsx'
+import ComparePage from './pages/ComparePage.jsx'
+import DashboardPage from './pages/DashboardPage.jsx'
+import MapPage from './pages/MapPage.jsx'
+import RegionsPage from './pages/RegionsPage.jsx'
+import { useHashRoute } from './router.js'
+import { AppDataProvider } from './state/AppDataContext.jsx'
+import { useAppData } from './state/context.js'
 import './App.css'
 
-export default function App() {
-  const [health, setHealth] = useState(null)
-  const [limitations, setLimitations] = useState([])
-  const [error, setError] = useState(null)
+const PAGES = {
+  '/': DashboardPage,
+  '/regiones': RegionsPage,
+  '/mapas': MapPage,
+  '/comparador': ComparePage,
+  '/analisis': AnalysisPage,
+  '/aci': AciPage,
+}
 
-  useEffect(() => {
-    const controller = new AbortController()
-    Promise.all([
-      getHealth({ signal: controller.signal }),
-      getLimitations({ signal: controller.signal }),
-    ])
-      .then(([healthBody, limitationsBody]) => {
-        setHealth(healthBody)
-        setLimitations(limitationsBody.data)
-      })
-      .catch((err) => {
-        if (err.name !== 'AbortError') setError(err)
-      })
-    return () => controller.abort()
-  }, [])
-
+export function Shell({ route }) {
+  const { health, limitations } = useAppData()
+  const Page = PAGES[route.path] ?? DashboardPage
   return (
-    <main className="app">
-      <header>
-        <h1>MARS-ANALOG</h1>
-        <p className="subtitle">
-          Similitud topográfica experimental entre regiones terrestres y el cráter Jezero (Marte)
-        </p>
-      </header>
-      <LimitationsBanner limitations={limitations} />
-      <StatusPanel health={health} error={error} />
-    </main>
+    <Layout route={route} health={health} limitations={limitations.body?.data ?? []}>
+      <Page route={route} />
+    </Layout>
+  )
+}
+
+export default function App() {
+  const route = useHashRoute()
+  return (
+    <AppDataProvider>
+      <Shell route={route} />
+    </AppDataProvider>
   )
 }

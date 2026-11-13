@@ -1,45 +1,42 @@
+import { Field, Panel, StatusBadge } from './ui.jsx'
+
 export default function StatusPanel({ health, error }) {
   if (error) {
     return (
-      <section className="status-panel status-error">
-        <h2>Estado del backend</h2>
+      <Panel title="Estado del backend" className="status-panel status-error">
+        <StatusBadge tone="error">No disponible</StatusBadge>
         <p>
-          No disponible ({error.code}): {error.message}
+          {error.message} <code>{error.code}</code>
         </p>
-      </section>
+      </Panel>
     )
   }
   if (!health) {
     return (
-      <section className="status-panel">
-        <h2>Estado del backend</h2>
+      <Panel title="Estado del backend" className="status-panel">
         <p>Consultando…</p>
-      </section>
+      </Panel>
     )
   }
   const { data, meta } = health
   return (
-    <section className="status-panel">
-      <h2>Estado del backend</h2>
-      <dl>
-        <dt>Estado</dt>
-        <dd>{data.status}</dd>
-        <dt>API / software</dt>
-        <dd>
+    <Panel
+      title="Estado del backend"
+      className="status-panel"
+      actions={<StatusBadge tone="ok">En línea</StatusBadge>}
+    >
+      <dl className="fields">
+        <Field label="API / software">
           {data.api_version} / {data.software_version} ({data.git_commit ?? 'sin commit'})
-        </dd>
-        <dt>Python</dt>
-        <dd>{data.python}</dd>
-        <dt>GDAL</dt>
-        <dd>{data.gdal}</dd>
-        <dt>PROJ (rasterio / pyproj)</dt>
-        <dd>
+        </Field>
+        <Field label="Python">{data.python}</Field>
+        <Field label="GDAL">{data.gdal}</Field>
+        <Field label="PROJ (rasterio / pyproj)">
           {data.proj_rasterio} / {data.proj_pyproj}
-        </dd>
-        <dt>Resultados</dt>
-        <dd>{data.results_run_id ?? 'Todavía no hay resultados calculados'}</dd>
+        </Field>
+        <Field label="Resultados">{data.results_run_id ?? 'Todavía no hay resultados calculados'}</Field>
       </dl>
       {meta.is_synthetic && <p className="synthetic-warning">Datos sintéticos de prueba</p>}
-    </section>
+    </Panel>
   )
 }

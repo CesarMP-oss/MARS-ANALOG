@@ -40,6 +40,14 @@ export async function apiGet(path, { fetchImpl = globalThis.fetch, signal } = {}
   try {
     body = await response.json()
   } catch {
+    if (!response.ok) {
+      // A dev proxy or gateway answers without JSON when FastAPI is unreachable.
+      throw new ApiError(
+        response.status,
+        'backend_unavailable',
+        `No se pudo conectar con el backend (HTTP ${response.status})`,
+      )
+    }
     throw new ApiError(response.status, 'invalid_json', 'La API no devolvió JSON válido')
   }
 
@@ -63,5 +71,19 @@ export function hasValues(result) {
   return result?.status === 'ok' || result?.status === 'below_noise_floor'
 }
 
+const id = (value) => encodeURIComponent(value)
+
 export const getHealth = (options) => apiGet('/health', options)
 export const getLimitations = (options) => apiGet('/limitations', options)
+export const getDatasets = (options) => apiGet('/datasets', options)
+export const getRegions = (options) => apiGet('/regions', options)
+export const getRegionMetrics = (regionId, options) => apiGet(`/regions/${id(regionId)}/metrics`, options)
+export const getComparisons = (referenceId, options) =>
+  apiGet(`/comparisons?reference=${id(referenceId)}`, options)
+export const getComparison = (referenceId, candidateId, options) =>
+  apiGet(`/comparisons/${id(referenceId)}/${id(candidateId)}`, options)
+
+// The requested region or reference has no AOI loaded in the API yet (expected before milestone 1).
+export function isNotLoaded(error) {
+  return error?.status === 404 && error?.code === 'region_not_found'
+}

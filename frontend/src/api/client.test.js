@@ -46,10 +46,13 @@ describe('apiGet', () => {
     await expect(apiGet('/health', { fetchImpl })).rejects.toMatchObject({ code: 'invalid_envelope' })
   })
 
-  it('reports invalid JSON and network failures', async () => {
+  it('reports an unreachable backend, invalid JSON and network failures', async () => {
     await expect(
       apiGet('/health', { fetchImpl: fakeFetch(502, null, { json: false }) }),
-    ).rejects.toMatchObject({ code: 'invalid_json', status: 502 })
+    ).rejects.toMatchObject({ code: 'backend_unavailable', status: 502 })
+    await expect(
+      apiGet('/health', { fetchImpl: fakeFetch(200, null, { json: false }) }),
+    ).rejects.toMatchObject({ code: 'invalid_json', status: 200 })
     const failing = async () => {
       throw new TypeError('Failed to fetch')
     }

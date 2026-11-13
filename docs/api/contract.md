@@ -65,10 +65,30 @@ RFC 7946 asume WGS84; para Marte nos apartamos del estándar de forma explícita
 `crs`, y el esquema rechaza una región marciana etiquetada como `EPSG:4326`. MOLA usa longitudes
 `0..360`; el pipeline las convierte a `-180..180` (Jezero, ~77.7°E, no cambia).
 
-**Mapas (hito 5):** el mapa de Marte **no** usará mapas base ni teselas terrestres. Se mostrará
-un hillshade generado a partir del DEM procesado como `L.imageOverlay` sobre un CRS propio
-(`L.CRS.Simple` o equirectangular planetocéntrico), y se añadirá una prueba que verifique que
-coordenadas conocidas de Jezero caen en el píxel esperado.
+**Mapas.** La interfaz tiene un mapa independiente por cuerpo (`frontend/src/map/`):
+
+- Tierra: `L.CRS.EPSG3857` con coordenadas WGS84 y teselas Esri World Imagery como contexto visual.
+- Marte: CRS propio (`createMarsCrs`, código `IAU_2015:49900`) equirectangular planetocéntrico,
+  longitud este `-180..180`, distancias sobre la esfera IAU 2015 (R = 3396,19 km). Usa como
+  contexto visual las teselas `Mars_MGS_MOLA_ClrShade_merge_global_463m` de NASA Mars Trek
+  (EPSG:104905, 2×1 teselas en el nivel 0). Nunca usa mapas base ni CRS terrestres.
+- Pruebas (`crs.test.js`) verifican que las coordenadas de Jezero caen en el píxel y la tesela
+  esperados y que el CRS marciano no es EPSG.
+- Las teselas de contexto **no** son los datos analizados. El hillshade del DEM procesado se
+  mostrará como capa propia en el hito 5 (ver endpoints propuestos).
+
+## Endpoints propuestos (no implementados)
+
+Necesidades del frontend sin endpoint todavía. La interfaz muestra estados vacíos hasta que existan.
+
+| Ruta propuesta | `data` | Uso en la interfaz |
+|---|---|---|
+| `GET /api/v1/regions/{id}/layers` | lista de capas raster (`hillshade`, `slope`, …) con `bounds`, `crs`, `scale_m`, `url` de un PNG/COG precomputado y `provenance_id` | Capas DEM en Mapas y en el Comparador (hito 5) |
+| `GET /api/v1/regions/{id}/metrics/{metric}/histogram` | histograma completo por métrica si el resumen de `RegionMetrics` resulta insuficiente | Gráficos de distribución (Plotly) |
+
+Mientras los AOI no existan (`data/aoi/` vacío), las fichas de región usan un catálogo estático
+del frontend (`frontend/src/catalog/regions.js`) con nombre, descripción general y un punto de
+referencia citado (no es el AOI). Cuando `GET /regions` devuelva un AOI, la interfaz lo usa.
 
 ## Estados de métricas (`MetricSummary.status`)
 
