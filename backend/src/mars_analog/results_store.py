@@ -49,8 +49,19 @@ class InvalidIdentifier(ValueError):
 
 
 def _read_json(path: Path) -> Any:
-    with path.open(encoding="utf-8") as fh:
-        return json.load(fh)
+    try:
+        with path.open(encoding="utf-8") as fh:
+            return json.load(fh)
+    except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+        raise StoreError(f"{path.name} is not valid JSON: {exc}") from exc
+
+
+def _read_yaml(path: Path) -> Any:
+    try:
+        with path.open(encoding="utf-8") as fh:
+            return yaml.safe_load(fh)
+    except (yaml.YAMLError, UnicodeDecodeError) as exc:
+        raise StoreError(f"{path.name} is not valid YAML: {exc}") from exc
 
 
 def _safe(identifier: str) -> str:
@@ -69,8 +80,7 @@ class ResultsStore:
         path = self.settings.manifest_path
         if not path.is_file():
             return []
-        with path.open(encoding="utf-8") as fh:
-            raw = yaml.safe_load(fh) or {}
+        raw = _read_yaml(path) or {}
         datasets = DatasetManifest.model_validate(raw).datasets
         if not self.settings.allow_synthetic:
             datasets = [d for d in datasets if not d.is_synthetic]

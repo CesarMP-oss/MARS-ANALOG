@@ -151,3 +151,12 @@ def test_synthetic_provenance_hidden_inside_a_real_run(synthetic_copy_client):
     client = synthetic_copy_client(mark_run_real)
     assert client.get("/api/v1/health").json()["data"]["results_run_id"] == "synthetic-run-0001"
     assert client.get("/api/v1/provenance/prov_00000000000000aa").status_code == 404
+
+
+def test_malformed_stored_json_returns_structured_error(synthetic_copy_client):
+    def corrupt(results):
+        (results / "synthetic-run-0001" / "run.json").write_text("{not json", encoding="utf-8")
+
+    response = synthetic_copy_client(corrupt).get("/api/v1/health")
+    assert response.status_code == 500
+    assert response.json()["error"]["code"] == "results_store_invalid"
