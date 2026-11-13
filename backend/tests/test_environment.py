@@ -1,4 +1,3 @@
-
 """Checks that the geospatial stack can represent the datasets MARS-ANALOG relies on."""
 
 import sys
