@@ -1,0 +1,43 @@
+{
+  "type": "Feature",
+  "id": "synthetic_reference",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          10,
+          10
+        ],
+        [
+          11,
+          10
+        ],
+        [
+          11,
+          11
+        ],
+        [
+          10,
+          11
+        ],
+        [
+          10,
+          10
+        ]
+      ]
+    ]
+  },
+  "properties": {
+    "name": "SYNTHETIC synthetic_reference",
+    "body": "mars",
+    "crs": "IAU_2015:49900",
+    "role": "reference",
+    "dataset_id": "synthetic_dem",
+    "aoi_version": "0.0.0-test",
+    "boundary_source": "Synthetic test fixture",
+    "rationale": "Synthetic test fixture",
+    "area_km2": null,
+    "is_synthetic": true
+  }
+}

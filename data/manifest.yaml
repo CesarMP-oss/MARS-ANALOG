@@ -1,0 +1,61 @@
+# Dataset manifest (validated by backend/tests/test_datasets_manifest.py).
+# sha256 values stay null until each file is downloaded and verified in milestone 1.
+# Facts below were checked against official documentation; see docs/science/datasets.md.
+manifest_version: "0.1.0"
+datasets:
+  - id: srtmgl1_v003
+    body: earth
+    name: "NASA Shuttle Radar Topography Mission Global 1 arc second (SRTMGL1) V003"
+    product_id: "SRTMGL1.003"
+    product_version: "003"
+    doi: "10.5067/MEASURES/SRTM/SRTMGL1.003"
+    source_url: "https://lpdaac.usgs.gov/products/srtmgl1v003/"
+    documentation_urls:
+      - "https://lpdaac.usgs.gov/documents/179/SRTM_User_Guide_V3.pdf"
+    nominal_resolution_m: 30.0
+    horizontal_reference: "WGS84 geographic, 1 arc-second posting"
+    vertical_reference: "EGM96 geoid (metres)"
+    citation: "NASA JPL (2013). NASA Shuttle Radar Topography Mission Global 1 arc second V003. NASA EOSDIS Land Processes DAAC. https://doi.org/10.5067/MEaSUREs/SRTM/SRTMGL1.003"
+    known_limitations: [SRTM_VOID_FILL, GMTED_SOUTH_AMERICA_SHIFT, DEM_NOISE_FLAT_TERRAIN]
+    files: []  # tiles for the four Earth regions are selected in milestone 1
+
+  - id: srtmgl1n_v003
+    body: earth
+    name: "NASA SRTM Global 1 arc second number (SRTMGL1N) V003 - per-pixel source indicator"
+    product_id: "SRTMGL1N.003"
+    product_version: "003"
+    doi: "10.5067/MEASURES/SRTM/SRTMGL1N.003"
+    source_url: "https://lpdaac.usgs.gov/products/srtmgl1nv003/"
+    documentation_urls:
+      - "https://lpdaac.usgs.gov/documents/179/SRTM_User_Guide_V3.pdf"
+    nominal_resolution_m: 30.0
+    horizontal_reference: "WGS84 geographic, 1 arc-second posting"
+    vertical_reference: "not applicable (source codes)"
+    citation: "NASA JPL (2013). NASA Shuttle Radar Topography Mission Global 1 arc second number V003. NASA EOSDIS Land Processes DAAC. https://doi.org/10.5067/MEaSUREs/SRTM/SRTMGL1N.003"
+    known_limitations: [SRTM_VOID_FILL]
+    files: []
+
+  - id: mola_megdr_128
+    body: mars
+    name: "MGS MOLA Mission Experiment Gridded Data Record (MEGDR), 128 pixels/degree"
+    product_id: "MGS-M-MOLA-5-MEGDR-L3-V1.0"
+    product_version: "2.0"
+    doi: null  # to verify in milestone 1
+    source_url: "https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/meg128/"
+    documentation_urls:
+      - "https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/document/egdrsis.htm"
+      - "https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/errata.txt"
+    nominal_resolution_m: 463.058
+    horizontal_reference: "Planetocentric, east-positive longitude 0-360, sphere R = 3396000 m (product label)"
+    vertical_reference: "Areoid GMM3 (mgm1025), degree and order 50"
+    citation: "Smith, D. E., et al., Mars Global Surveyor Laser Altimeter Mission Experiment Gridded Data Record, MGS-M-MOLA-5-MEGDR-L3-V1.0, NASA Planetary Data System, 2003."
+    known_limitations: [MOLA_INTERPOLATED_BINS, MEGDR_GDAL_PIXEL_SCALE, DIFFERENT_VERTICAL_REFERENCES]
+    files:
+      - name: megt44n000hb.img
+        role: topography (0-44N, 0-90E; contains Jezero)
+        bytes: 129761280  # 11520 x 5632 x 2 bytes, from the PDS label
+        url: "https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/meg128/megt44n000hb.img"
+      - name: megc44n000hb.img
+        role: counts (MOLA shots per bin; 0 = interpolated)
+        bytes: 64880640  # 11520 x 5632 x 1 byte, from the PDS label
+        url: "https://pds-geosciences.wustl.edu/mgs/mgs-m-mola-5-megdr-l3-v1/mgsl_300x/meg128/megc44n000hb.img"

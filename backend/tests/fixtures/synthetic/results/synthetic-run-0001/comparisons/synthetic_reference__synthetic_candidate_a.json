@@ -1,0 +1,43 @@
+{
+  "aci_version": "0.0-test",
+  "reference_region_id": "synthetic_reference",
+  "candidate_region_id": "synthetic_candidate_a",
+  "scale_m": 463.058,
+  "status": "ok",
+  "score": 0.5,
+  "score_interval": {
+    "low": 0.4,
+    "high": 0.6,
+    "level": 0.9,
+    "method": "synthetic"
+  },
+  "components": [
+    {
+      "metric": "slope",
+      "unit": "degree",
+      "distance": 1.0,
+      "normalized_distance": 0.5,
+      "similarity": 0.6,
+      "weight": 0.5
+    },
+    {
+      "metric": "local_relief",
+      "unit": "m",
+      "distance": 2.0,
+      "normalized_distance": 0.9,
+      "similarity": 0.4,
+      "weight": 0.5
+    },
+    {
+      "metric": "tri_riley",
+      "unit": "m",
+      "weight": 0.0,
+      "included": false,
+      "exclusion_reason": "insufficient_data"
+    }
+  ],
+  "limitations": [
+    "DEM_NOISE_FLAT_TERRAIN"
+  ],
+  "provenance_id": "prov_00000000000000aa"
+}
