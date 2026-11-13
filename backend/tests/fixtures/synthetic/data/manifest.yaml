@@ -10,6 +10,7 @@ datasets:
     horizontal_reference: "synthetic"
     vertical_reference: "synthetic"
     citation: "Synthetic test fixture"
+    is_synthetic: true
     known_limitations: [SRTM_VOID_FILL]
     files:
       - name: synthetic.tif

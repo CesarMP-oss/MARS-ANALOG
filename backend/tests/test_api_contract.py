@@ -1,3 +1,5 @@
+import json
+
 import pytest
 
 from mars_analog.limitations import LIMITATIONS
@@ -127,6 +129,7 @@ def test_errors_use_the_error_format(synthetic_client, path, status, code):
 def test_synthetic_data_is_invisible_with_production_settings(production_view_of_synthetic):
     client = production_view_of_synthetic
     assert client.get("/api/v1/regions").json()["data"] == []
+    assert client.get("/api/v1/datasets").json()["data"] == []
     health = client.get("/api/v1/health").json()
     assert health["data"]["results_run_id"] is None
     assert health["meta"]["is_synthetic"] is False
@@ -136,3 +139,15 @@ def test_synthetic_data_is_invisible_with_production_settings(production_view_of
 def test_repository_data_serves_no_results_yet(repo_client):
     assert repo_client.get("/api/v1/health").json()["data"]["results_run_id"] is None
     assert repo_client.get("/api/v1/regions").json()["data"] == []
+
+
+def test_synthetic_provenance_hidden_inside_a_real_run(synthetic_copy_client):
+    def mark_run_real(results):
+        run_file = results / "synthetic-run-0001" / "run.json"
+        run = json.loads(run_file.read_text(encoding="utf-8"))
+        run["is_synthetic"] = False
+        run_file.write_text(json.dumps(run), encoding="utf-8")
+
+    client = synthetic_copy_client(mark_run_real)
+    assert client.get("/api/v1/health").json()["data"]["results_run_id"] == "synthetic-run-0001"
+    assert client.get("/api/v1/provenance/prov_00000000000000aa").status_code == 404

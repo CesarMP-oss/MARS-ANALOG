@@ -71,7 +71,10 @@ class ResultsStore:
             return []
         with path.open(encoding="utf-8") as fh:
             raw = yaml.safe_load(fh) or {}
-        return DatasetManifest.model_validate(raw).datasets
+        datasets = DatasetManifest.model_validate(raw).datasets
+        if not self.settings.allow_synthetic:
+            datasets = [d for d in datasets if not d.is_synthetic]
+        return datasets
 
     def dataset(self, dataset_id: str) -> Dataset | None:
         return next((d for d in self.datasets() if d.id == dataset_id), None)
@@ -145,4 +148,10 @@ class ResultsStore:
         if run_dir is None:
             return None
         path = run_dir / "provenance" / f"{_safe(provenance_id)}.json"
-        return Provenance.model_validate(_read_json(path)) if path.is_file() else None
+        if not path.is_file():
+            return None
+        record = Provenance.model_validate(_read_json(path))
+        if record.is_synthetic and not self.settings.allow_synthetic:
+            logger.warning("Ignoring synthetic provenance record %s", path)
+            return None
+        return record

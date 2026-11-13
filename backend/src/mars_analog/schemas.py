@@ -103,6 +103,7 @@ class Dataset(StrictModel):
     citation: str
     known_limitations: list[str] = Field(default_factory=list)
     files: list[DatasetFile] = Field(default_factory=list)
+    is_synthetic: bool = False
 
 
 class DatasetManifest(StrictModel):

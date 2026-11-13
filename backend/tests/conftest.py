@@ -1,3 +1,4 @@
+import shutil
 from pathlib import Path
 
 import pytest
@@ -29,6 +30,19 @@ def synthetic_client() -> TestClient:
 def production_view_of_synthetic() -> TestClient:
     """Same fixtures, but with production settings: synthetic records must be invisible."""
     return make_client(SYNTHETIC / "data", SYNTHETIC / "results", allow_synthetic=False)
+
+
+@pytest.fixture
+def synthetic_copy_client(tmp_path: Path):
+    """Factory: copy synthetic results, apply ``edit(results_dir)``, serve in production mode."""
+
+    def factory(edit) -> TestClient:
+        results = tmp_path / "results"
+        shutil.copytree(SYNTHETIC / "results", results)
+        edit(results)
+        return make_client(SYNTHETIC / "data", results, allow_synthetic=False)
+
+    return factory
 
 
 @pytest.fixture
