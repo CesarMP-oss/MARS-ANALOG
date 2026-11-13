@@ -292,7 +292,8 @@ class AciResult(StrictModel):
             if v is not None
         ]
         if self.status != "ok":
-            if self.score is not None or component_values or self.score_interval.low is not None:
+            interval = (self.score_interval.low, self.score_interval.high)
+            if self.score is not None or component_values or any(v is not None for v in interval):
                 raise ValueError(f"status {self.status!r} must not carry a score or components")
         else:
             if self.score is None or self.provenance_id is None:

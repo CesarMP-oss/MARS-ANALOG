@@ -87,6 +87,9 @@ def test_aci_without_ok_status_has_no_score():
         AciResult.model_validate(
             aci(components=[{"metric": "slope", "unit": "degree", "similarity": 0.5, "weight": 1}])
         )
+    for bound in ("low", "high"):
+        with pytest.raises(ValidationError):
+            AciResult.model_validate(aci(score_interval={bound: 0.6}))
 
 
 def test_aci_ok_requires_consistent_components():
